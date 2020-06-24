@@ -20,12 +20,6 @@ func (ue *StringEndpoints) Health(ctx context.Context) (bool, error) {
 	panic("implement me")
 }
 
-/*func (ue *StringEndpoints) Health(ctx context.Context) (bool, error) {
-	status, err := ue.HealthEndpoint(ctx)
-	response := status.(*HealthResponse)
-	return response.Status, err
-}*/
-
 func (ue *StringEndpoints) Concat(ctx context.Context, a, b string) (string, error) {
 	resp, err := ue.StringEndpoint(ctx, &pb.StringRequest{A: a, B: b})
 	response := resp.(*pb.StringResponse)
