@@ -15,4 +15,6 @@ grpc update
 
 目录如下：
 
-* 
+* proto
+* pkg 
+* server
