@@ -12,6 +12,7 @@ import (
 
 func TogRPCError(err *Error) error {
 	s := status.New(ToRPCCode(err.code), err.msg)
+	return s.Err()
 }
 
 func ToRPCCode(code int) codes.Code {
