@@ -14,6 +14,6 @@ var (
 	Unkonwn          = NewError(1000004, "未知错误")
 	DeadlineExceeded = NewError(10000005, "超过最后截止期限")
 	AccessDenied     = NewError(10000006, "访问被拒绝")
-	LimitExcedd      = NewError(10000007, "访问受限")
+	LimitExceded     = NewError(10000007, "访问受限")
 	MethodNotAllowed = NewError(10000008, "不支持该方法")
 )
