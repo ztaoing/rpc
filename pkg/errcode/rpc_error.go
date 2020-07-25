@@ -5,10 +5,13 @@
 
 package errcode
 
-import "google.golang.org/grpc/codes"
+import (
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
+)
 
 func TogRPCError(err *Error) error {
-
+	s := status.New(ToRPCCode(err.code), err.msg)
 }
 
 func ToRPCCode(code int) codes.Code {
