@@ -21,6 +21,7 @@ import (
 	"log"
 	"net/http"
 	"path"
+	"rpc/internal/middleware"
 	"rpc/pkg/swagger"
 	"rpc/proto"
 	"rpc/server"
@@ -107,6 +108,7 @@ func runGrpcServer() *grpc.Server {
 		grpc.UnaryInterceptor(grpc_middleware.ChainUnaryServer(
 			HelloInterceptor,
 			WorldInterceptor,
+			middleware.ServerTracing, //链路追踪
 		)),
 	}
 	s := grpc.NewServer(opts...)

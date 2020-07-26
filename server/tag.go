@@ -21,7 +21,6 @@ func NewTagServer() *TagServer {
 }
 
 func (t *TagServer) GetTagList(ctx context.Context, r *proto.GetTagListRequest) (*proto.GetTagListReply, error) {
-	panic("测试出现异常!")
 	//博客后端服务地址
 	api := bapi.NewAPI("http://127.0.0.1:8000")
 	body, err := api.GetTagList(ctx, r.GetName())

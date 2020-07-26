@@ -44,6 +44,7 @@ func (a *API) httpGet(ctx context.Context, path string) ([]byte, error) {
 		return nil, err
 	}
 
+	//http的链路追踪和grpc的链路追踪的设置逻辑是一样的
 	//链路追踪
 	span, _ := opentracing.StartSpanFromContext(ctx, "HTTP GET"+a.URL, opentracing.Tag{Key: string(ext.Component), Value: "HTTP"})
 	//设置tag

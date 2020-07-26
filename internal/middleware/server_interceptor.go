@@ -7,9 +7,13 @@ package middleware
 
 import (
 	"context"
+	"github.com/opentracing/opentracing-go"
+	"github.com/opentracing/opentracing-go/ext"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/metadata"
 	"log"
 	"rpc/pkg/errcode"
+	"rpc/pkg/metatext"
 	"runtime/debug"
 	"time"
 )
@@ -48,5 +52,30 @@ func Recovery(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, 
 			log.Printf(recoverLog, info.FullMethod, e, string(debug.Stack()[:]))
 		}
 	}()
+	return handler(ctx, req)
+}
+
+//链路追踪
+func ServerTracing(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
+	//从上下文中读取
+	md, ok := metadata.FromIncomingContext(ctx)
+	if !ok {
+		//新生成一个空的metadata
+		md = metadata.New(nil)
+	}
+	//从给定的载体中解码出span context实例
+	parentSpanContext, _ := opentracing.Tracer.Extract(opentracing.TextMap, metatext.MetadataTextMap{md})
+	//options 设置本地span的标签信息
+	opts := []opentracing.StartSpanOption{
+		opentracing.Tag{Key: string(ext.Component), Value: "gRPC"},
+		ext.SpanKindRPCServer,
+		ext.RPCServerOption(parentSpanContext),
+	}
+
+	//根据父span生成新的span
+	span := opentracing.Tracer.StartSpan(info.FullMethod, opts...)
+	defer span.Finish()
+
+	ctx = opentracing.ContextWithSpan(ctx, span)
 	return handler(ctx, req)
 }
