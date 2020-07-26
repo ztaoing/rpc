@@ -9,6 +9,7 @@ import (
 	"context"
 	"encoding/json"
 	"rpc/pkg/bapi"
+	"rpc/pkg/errcode"
 	"rpc/proto"
 )
 
@@ -20,11 +21,12 @@ func NewTagServer() *TagServer {
 }
 
 func (t *TagServer) GetTagList(ctx context.Context, r *proto.GetTagListRequest) (*proto.GetTagListReply, error) {
+	panic("测试出现异常!")
 	//博客后端服务地址
 	api := bapi.NewAPI("http://127.0.0.1:8000")
 	body, err := api.GetTagList(ctx, r.GetName())
 	if err != nil {
-		return nil, err
+		return nil, errcode.TogRPCError(errcode.ERROR_GET_TAG_LIST_FAIL)
 	}
 
 	tagList := proto.GetTagListReply{}
